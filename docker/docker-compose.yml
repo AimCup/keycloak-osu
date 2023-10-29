@@ -1,0 +1,17 @@
+services:
+  keycloak_osu:
+    image: quay.io/keycloak/keycloak:22.0.5
+    command: start-dev
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KC_DB=postgres
+      - KC_DB_PASSWORD=password
+      - KC_DB_URL=jdbc:postgresql://localhost/auth
+      - DB_USER=keycloak
+      - DB_PASSWORD=password
+    ports:
+      - 8080:8080
+      - 8090:8443
+    volumes:
+      - ./providers:/opt/keycloak/providers
