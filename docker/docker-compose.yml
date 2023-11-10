@@ -1,4 +1,15 @@
 services:
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_PASSWORD: admin
+      POSTGRES_USER: admin
+      POSTGRES_DB: pdb
+    ports:
+      - 5432:5432
+    networks:
+      - keycloak
+
   keycloak_osu:
     image: quay.io/keycloak/keycloak:22.0.5
     command: start-dev
@@ -6,12 +17,16 @@ services:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin
       - KC_DB=postgres
-      - KC_DB_PASSWORD=password
-      - KC_DB_URL=jdbc:postgresql://localhost/auth
-      - DB_USER=keycloak
-      - DB_PASSWORD=password
+      - KC_DB_URL=jdbc:postgresql://postgres:5432/pdb
+      - KC_DB_USERNAME=admin
+      - KC_DB_PASSWORD=admin
     ports:
       - 8080:8080
       - 8090:8443
     volumes:
       - ./providers:/opt/keycloak/providers
+    networks:
+      - keycloak
+networks:
+  keycloak:
+    driver: bridge
