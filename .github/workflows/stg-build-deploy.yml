@@ -1,0 +1,29 @@
+name: Deploy to Staging
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - stage
+
+jobs:
+  build:
+    runs-on:
+      group: Default
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run keycloak db (if needed)
+        run: |
+          docker-compose -f docker/stg/stg-run-database-job.yml up -d --build
+        env:
+          KEYCLOAK_POSTGRES_PASSWORD: ${{ secrets.KEYCLOAK_POSTGRES_PASSWORD }}
+          KEYCLOAK_ADMIN: ${{ secrets.KEYCLOAK_ADMIN }}
+          KEYCLOAK_PASSWORD: ${{ secrets.KEYCLOAK_PASSWORD }}
+      - name: Build and deploy the Docker image
+        run: |
+          docker-compose -f docker/stg/stg-build-deploy-job.yml up -d --build
+        env:
+          KEYCLOAK_POSTGRES_PASSWORD: ${{ secrets.KEYCLOAK_POSTGRES_PASSWORD }}
+          KEYCLOAK_ADMIN: ${{ secrets.KEYCLOAK_ADMIN }}
+          KEYCLOAK_PASSWORD: ${{ secrets.KEYCLOAK_PASSWORD }}

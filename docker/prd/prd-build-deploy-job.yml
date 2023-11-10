@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  keycloak_osu_prod:
+    image: quay.io/keycloak/keycloak:22.0.5
+    command: start-dev
+    environment:
+      - KEYCLOAK_ADMIN=${KEYCLOAK_ADMIN}
+      - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_PASSWORD}
+      - KC_DB=postgres
+      - KC_DB_URL=jdbc:postgresql://172.18.0.1:5402/keycloak-db
+      - KC_DB_USERNAME=admin
+      - KC_DB_PASSWORD=${KEYCLOAK_POSTGRES_PASSWORD}
+    ports:
+      - 8102:8080
+      - 8090:8443
+    volumes:
+      - ./providers:/opt/keycloak/providers
+    networks:
+      - keycloak
+    container_name: keycloak_stage
+    build:
+      context: ../..
+      dockerfile: docker/prd/prd-build-deploy.Dockerfile
+
+networks:
+  default:
+    external: true
+    name: aimcup-network

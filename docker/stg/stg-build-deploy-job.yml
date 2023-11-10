@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  pre_build_stage:
+    build:
+      context: ../..
+      dockerfile: docker/stg/stg-build-deploy.Dockerfile
+    command: /bin/bash -c "echo 'Running pre-build script' && ./copy-jar.sh"
+    depends_on:
+      - keycloak_osu_stage
+
+  keycloak_osu_stage:
+    image: quay.io/keycloak/keycloak:22.0.5
+    command: start-dev
+    environment:
+      - KEYCLOAK_ADMIN=${KEYCLOAK_ADMIN}
+      - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_PASSWORD}
+      - KC_DB=postgres
+      - KC_DB_URL=jdbc:postgresql://172.18.0.1:5502/keycloak-db
+      - KC_DB_USERNAME=admin
+      - KC_DB_PASSWORD=${KEYCLOAK_POSTGRES_PASSWORD}
+    networks:
+      - aimcup-network
+    ports:
+      - 8202:8080
+      - 8090:8443
+    volumes:
+      - ./providers:/opt/keycloak/providers
+    container_name: keycloak_stage
+    build:
+      context: ../..
+      dockerfile: docker/stg/stg-build-deploy.Dockerfile
+
+networks:
+  aimcup-network:
+    external: true
