@@ -6,6 +6,8 @@ on:
       - closed
     branches:
       - stage
+  workflow_dispatch:
+    branches: [ "stage" ]
 
 jobs:
   build:
