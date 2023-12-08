@@ -49,7 +49,7 @@ public class OsuIdentityProvider extends AbstractOAuth2IdentityProvider<OsuIdent
         BrokeredIdentityContext user = new BrokeredIdentityContext(getJsonProperty(node, "id"));
 
         user.setId(getJsonProperty(node, "id"));
-        user.setUsername(getJsonProperty(node, "username"));
+        user.setUsername(getJsonProperty(node, "id"));
 
         OsuUserAttributeMapper.storeUserProfileForMapper(user, node, getConfig().getAlias());
         log.log(java.util.logging.Level.INFO, "==========extractIdentityFromProfile: " + user.getUsername());
