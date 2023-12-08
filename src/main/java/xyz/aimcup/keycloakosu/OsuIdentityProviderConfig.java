@@ -14,7 +14,7 @@ public class OsuIdentityProviderConfig extends OAuth2IdentityProviderConfig {
 
     @Override
     public String getDefaultScope() {
-        return "identify";
+        return "identify public";
     }
 
     @Override
