@@ -6,7 +6,7 @@ services:
     container_name: keycloak_db_prod
     environment:
       POSTGRES_USER: ${PRD_KEYCLOAK_POSTGRES_USER}
-      POSTGRES_PASSWORD: ${KEYCLOAK_POSTGRES_PASSWORD}
+      POSTGRES_PASSWORD: ${PRD_KEYCLOAK_POSTGRES_PASSWORD}
       POSTGRES_DB: keycloak-db
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U postgres" ]
