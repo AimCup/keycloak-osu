@@ -24,6 +24,9 @@ jobs:
           KEYCLOAK_PASSWORD: ${{ secrets.KEYCLOAK_PASSWORD }}
       - name: Build and deploy the Docker image
         run: |
+          mvn clean package
+          mkdir -p docker/stg/providers
+          cp target/*.jar docker/stg/providers/keycloak-osu-idp.jar
           docker-compose -f docker/stg/stg-build-deploy-job.yml up -d --build
         env:
           KEYCLOAK_POSTGRES_PASSWORD: ${{ secrets.KEYCLOAK_POSTGRES_PASSWORD }}
