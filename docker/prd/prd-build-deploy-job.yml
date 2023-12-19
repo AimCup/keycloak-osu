@@ -25,9 +25,7 @@ services:
       - 8091:8443
     volumes:
       - ./providers:/opt/keycloak/providers
-    networks:
-      - keycloak
-    container_name: keycloak_stage
+    container_name: keycloak_production
 
 networks:
   default:
