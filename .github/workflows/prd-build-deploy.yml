@@ -14,13 +14,21 @@ jobs:
         run: |
           docker-compose -f docker/prd/prd-run-database-job.yml up -d --build
         env:
-          KEYCLOAK_POSTGRES_PASSWORD: ${{ secrets.KEYCLOAK_POSTGRES_PASSWORD }}
-          KEYCLOAK_ADMIN: ${{ secrets.KEYCLOAK_ADMIN }}
-          KEYCLOAK_PASSWORD: ${{ secrets.KEYCLOAK_PASSWORD }}
+          PRD_KEYCLOAK_POSTGRES_PASSWORD: ${{ secrets.PRD_KEYCLOAK_POSTGRES_PASSWORD }}
+          PRD_KEYCLOAK_ADMIN: ${{ secrets.PRD_KEYCLOAK_ADMIN }}
+          PRD_KEYCLOAK_PASSWORD: ${{ secrets.PRD_KEYCLOAK_PASSWORD }}
+          PRD_KEYCLOAK_POSTGRES_USER: ${{ secrets.PRD_KEYCLOAK_POSTGRES_USER }}
       - name: Build and deploy the Docker image
         run: |
+          mvn clean package
+          mkdir -p docker/prd/providers
+          cp target/*.jar docker/prd/providers/keycloak-osu-idp.jar
           docker-compose -f docker/prd/prd-build-deploy-job.yml up -d --build
         env:
-          KEYCLOAK_POSTGRES_PASSWORD: ${{ secrets.KEYCLOAK_POSTGRES_PASSWORD }}
-          KEYCLOAK_ADMIN: ${{ secrets.KEYCLOAK_ADMIN }}
-          KEYCLOAK_PASSWORD: ${{ secrets.KEYCLOAK_PASSWORD }}
+          PRD_KEYCLOAK_POSTGRES_PASSWORD: ${{ secrets.PRD_KEYCLOAK_POSTGRES_PASSWORD }}
+          PRD_KEYCLOAK_ADMIN: ${{ secrets.PRD_KEYCLOAK_ADMIN }}
+          PRD_KEYCLOAK_PASSWORD: ${{ secrets.PRD_KEYCLOAK_PASSWORD }}
+          PRD_KEYCLOAK_POSTGRES_USER: ${{ secrets.PRD_KEYCLOAK_POSTGRES_USER }}
+          PRD_KEYCLOAK_HOST: ${{ secrets.PRD_KEYCLOAK_HOST }}
+          PRD_KEYCLOAK_HOSTNAME: ${{ secrets.PRD_KEYCLOAK_HOSTNAME }}
+          PRD_KEYCLOAK_PORT: ${{ secrets.PRD_KEYCLOAK_PORT }}

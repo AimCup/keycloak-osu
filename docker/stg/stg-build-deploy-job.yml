@@ -8,18 +8,18 @@ services:
       - --hostname-strict=false
       - --hostname-strict-https=false
     environment:
-      - KEYCLOAK_ADMIN=${KEYCLOAK_ADMIN}
-      - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_PASSWORD}
+      - KEYCLOAK_ADMIN=${STG_KEYCLOAK_ADMIN}
+      - KEYCLOAK_ADMIN_PASSWORD=${STG_KEYCLOAK_PASSWORD}
       - KC_DB=postgres
-      - KC_DB_URL_HOST=172.18.0.1
+      - KC_DB_URL_HOST=${STG_KEYCLOAK_HOST}
       - KC_DB_URL_DATABASE=keycloak-db
-      - KC_DB_URL_PORT=5502
-      - KC_DB_USERNAME=admin
-      - KC_DB_PASSWORD=${KEYCLOAK_POSTGRES_PASSWORD}
+      - KC_DB_URL_PORT=${STG_KEYCLOAK_PORT}
+      - KC_DB_USERNAME=${STG_KEYCLOAK_POSTGRES_USER}
+      - KC_DB_PASSWORD=${STG_KEYCLOAK_POSTGRES_PASSWORD}
       - KC_PROXY=edge
       - KC_HTTP_ENABLED=true
-      - KC_HOSTNAME_URL=https://keycloak-stg.aimcup.xyz
-      - KC_HOSTNAME_ADMIN_URL=https://keycloak-stg.aimcup.xyz
+      - KC_HOSTNAME_URL=${STG_KEYCLOAK_HOSTNAME}
+      - KC_HOSTNAME_ADMIN_URL=${STG_KEYCLOAK_HOSTNAME}
     ports:
       - 8202:8080
       - 8090:8443
