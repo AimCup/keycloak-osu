@@ -3,25 +3,31 @@ version: '3.8'
 services:
   keycloak_osu_prod:
     image: quay.io/keycloak/keycloak:22.0.5
-    command: start-dev
+    command:
+      - start
+      - --hostname-strict=false
+      - --hostname-strict-https=false
     environment:
-      - KEYCLOAK_ADMIN=${KEYCLOAK_ADMIN}
-      - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_PASSWORD}
+      - KEYCLOAK_ADMIN=${PRD_KEYCLOAK_ADMIN}
+      - KEYCLOAK_ADMIN_PASSWORD=${PRD_KEYCLOAK_PASSWORD}
       - KC_DB=postgres
-      - KC_DB_URL=jdbc:postgresql://172.18.0.1:5402/keycloak-db
-      - KC_DB_USERNAME=admin
-      - KC_DB_PASSWORD=${KEYCLOAK_POSTGRES_PASSWORD}
+      - KC_DB_URL_HOST=${PRD_KEYCLOAK_HOST}
+      - KC_DB_URL_DATABASE=keycloak-db
+      - KC_DB_URL_PORT=${PRD_KEYCLOAK_PORT}
+      - KC_DB_USERNAME=${PRD_KEYCLOAK_POSTGRES_USER}
+      - KC_DB_PASSWORD=${PRD_KEYCLOAK_POSTGRES_PASSWORD}
+      - KC_PROXY=edge
+      - KC_HTTP_ENABLED=true
+      - KC_HOSTNAME_URL=${PRD_KEYCLOAK_HOSTNAME}
+      - KC_HOSTNAME_ADMIN_URL=${PRD_KEYCLOAK_HOSTNAME}
     ports:
       - 8102:8080
-      - 8090:8443
+      - 8091:8443
     volumes:
       - ./providers:/opt/keycloak/providers
     networks:
       - keycloak
     container_name: keycloak_stage
-    build:
-      context: ../..
-      dockerfile: docker/prd/prd-build-deploy.Dockerfile
 
 networks:
   default:
